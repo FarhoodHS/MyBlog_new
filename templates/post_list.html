@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}
+{% if 'user/' in request.path %}
+All posts by {{ user_post }}
+{% else %}
+All posts
+{% endif %}
+{% endblock title %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb bg-light">
+        {% if 'user/' in request.path %}
+        <li class="breadcrumb-item"><a href="{% url 'posts:post_list' %}">All Posts</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ user_post }}'s posts</li>
+        {% elif request.GET.q %}
+        <li class="breadcrumb-item"><a href="{% url 'posts:post_list' %}">All Posts</a></li>
+        {% if not posts %}
+        <li class="breadcrumb-item active" aria-current="page">No results for "{{ request.GET.q }}"</li>
+        {% else %}
+        <li class="breadcrumb-item active" aria-current="page">Search results for "{{ request.GET.q }}"</li>
+        {% endif %}
+        {% else %}
+        <li class="breadcrumb-item active" aria-current="page">All Posts</li>
+        {% endif %}
+    </ol>
+</nav>
+{% include "parts/alerts.html" %}
+<div class="row justify-content-center mt-3">
+    <div class="col align-self-center">
+        {% for post in posts %}
+        <div class="card mb-3">
+            <div class="row no-gutters">
+                {% if post.image %}
+                <div class="col-md-4">
+                    <img src="{{ post.image.url }}" class="card-img">
+                </div>
+                {% endif %}
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ post.title }} {% if post.is_updated %}
+                            <span class="badge badge-pill badge-success">Updated</span>{% endif %}
+                            {% if post.draft %}
+                            <span class="badge badge-pill badge-danger">Draft</span>{% endif %}
+                            {% if post.publish > current.date %}
+                            <span class="badge badge-pill badge-info">Future</span>{% endif %}
+                        </h5>
+                        <footer class="blockquote-footer">via <cite title="Source Title"><a class="text-secondary"
+                                    href="{% url 'posts:user_post_list' post.author.username %}">{{ post.author.username }}</a></cite>
+                            {{ post.timestamp|naturaltime }}
+                        </footer>
+                        <br>
+                        <p class="card-text">{{ post.content|truncatewords:21 }}</p>
+                        <a href="{% url 'posts:post_detail' post.slug %}" class="btn btn-primary">view</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+    </div>
+</div>
+
+<footer>
+    <nav aria-label="Page navigation example sticky_top">
+        <ul class="pagination justify-content-center">
+            {% if posts.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ posts.previous_page_number }}&q={{ request.GET.q }}"
+                    aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% endif %}
+
+            {% for num in paginator.page_range %}
+            {% if num != posts.number %}
+            <li class="page-item"><a class="page-link" href="?page={{ num }}&q={{ request.GET.q }}">{{ num }}</a></li>
+            {% else %}
+            <li class="page-item active" aria-current="page">
+                <span class="page-link">
+                    {{ num }}
+                    <span class="sr-only">(current)</span>
+                </span>
+                {% endif %}
+                {% endfor %}
+
+                {% if posts.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ posts.next_page_number }}&q={{ request.GET.q }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</footer>
+{% endblock content %}
