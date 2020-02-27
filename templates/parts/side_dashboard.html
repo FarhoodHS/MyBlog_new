@@ -1,18 +1,28 @@
 <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
+    <ol class="breadcrumb bg-light">
+        {% if user.is_authenticated %}
         <li class="breadcrumb-item active" aria-current="page">
-            {% if user.is_authenticated %}
             {% if user.first_name %}
             {{ user.first_name }}'s Dashboard
             {% else %}
             {{ user.username }}'s Dashboard
             {% endif %}
-            {% else %}
-            Hi Mr./Ms. Someone
-            {% endif %}
+            <a href="{% url 'accounts:dashboard' %}" class="ml-auto"><i class="fas fa-user-edit"></i></a>
         </li>
+        {% else %}
+        <li class="breadcrumb-item active" aria-current="page">
+            Hi Mr./Ms. Someone
+        </li>
+        {% endif %}
     </ol>
 </nav>
+{% if messages %}
+{% for message in messages %}
+{% if 'Username' in message.message or 'login' in message.message %}
+{% include "parts/alerts.html" %}
+{% endif %}
+{% endfor %}
+{% endif %}
 <div class="sticky-top">
     {% if not user.is_authenticated %}
     <div class="card card-body">

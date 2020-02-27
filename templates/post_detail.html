@@ -3,6 +3,7 @@
 {% load static %}
 {% load humanize %}
 {% load urlify %}
+{% load duration %}
 
 {% block title %}
 {{ post.title }}
@@ -10,7 +11,7 @@
 
 {% block content %}
 <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
+    <ol class="breadcrumb bg-light">
         <li class="breadcrumb-item"><a href="{% url 'posts:post_list' %}">All Posts</a></li>
         <li class="breadcrumb-item active" aria-current="page">{{ post.title }}</li>
     </ol>
@@ -24,9 +25,11 @@
     <div class="card-body">
         <div class="row">
             <div class="col-9">
-                <h4>{{ post.title }}</h4><small>Author: <cite title="Source Title"><a class="text-secondary"
+                <h4>{{ post.title }}</h4>
+                <small>Author: <cite title="Source Title"><a class="text-secondary"
                             href="{% url 'posts:user_post_list' post.author.username %}">{{ post.author.username }}</a></cite><br>
-                    {{ post.timestamp|naturaltime }}</small>
+                    {{ post.timestamp|naturaltime }}<br>
+                    Read Time: {{ read_time|etr }}</small>
             </div>
             {% if user.is_authenticated %}
             <div class="col-3">
@@ -92,3 +95,7 @@
     </div>
 </div>
 {% endblock content %}
+
+{% block right_sidebar %}
+{% include "parts/side_dashboard.html" %}
+{% endblock right_sidebar %}

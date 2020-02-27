@@ -1,5 +1,7 @@
+from datetime import timedelta
 from django.utils import timezone
-import re
+from math import ceil
+from re import findall
 
 
 years = list(range(timezone.now().year-5, timezone.now().year+6))
@@ -19,4 +21,14 @@ months = {
 }
 days = list(range(1, 32))
 
-# def get_read_time(text):
+
+def count_words(content):
+    count = len(findall(r'\w+', content))
+    return count
+
+
+def get_read_time(content):
+    words = count_words(content)
+    time_in_min = round(words/200.0, 1)
+    read_time = str(timedelta(minutes=time_in_min))
+    return read_time

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}
+{{ user.username }}'s Dashboard
+{% endblock title %}
+
+{% block content %}
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col col-6">
+            <h3>My Profile</h3><br>
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="card" style="width: 18rem;">
+                        <img src="{{ form.initial.profile_pic.url }}" class="card-img-top" alt="profile picture">
+                    </div>
+                </div><br>
+                <div class="custom-file mb-3">
+                    <input type="file" class="custom-file-input" name="profile_pic" id="customFile" accept="image/*">
+                    <label class="custom-file-label" for="customFile">Choose file</label>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col">
+                        <label>First Name</label>
+                        <input type="text" name="first_name" value="{{ form.first_name.value }}" class="form-control">
+                    </div>
+                    <div class="form-group col">
+                        <label>Last Name</label>
+                        <input type="text" name="last_name" value="{{ form.last_name.value }}" class="form-control">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col">
+                        <label>Email</label>
+                        <input type="email" name="email" value="{{ form.email.value }}" class="form-control" required>
+                        <small class="form-text text-danger">
+                            {{ form.email.errors.as_text }}
+                        </small>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col">
+                        <label>Username</label>
+                        <input type="text" name="username" value="{{ form.username.value }}" class="form-control"
+                            required>
+                        <small class="text-danger">
+                            {{ form.username.errors.as_text }}
+                        </small>
+                    </div>
+                </div>
+                <br>
+                <!-- <div class="form-row">
+                    <div class="form-group col">
+                        <div class="custom-file mb-3">
+                            <label class="custom-file-label" for="customFile">Choose a profile picture</label>
+                            <input type="file" class="custom-file-input" name="image" id="customFile" accept="image/*">
+                        </div>
+                    </div>
+                </div> -->
+                {% if messages %}
+                {% include "parts/alerts.html" %}
+                {% endif %}
+                <button class="btn btn-primary" type="submit">Save Changes</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<!-- {{ form.as_p }} -->
+
+{% endblock content %}

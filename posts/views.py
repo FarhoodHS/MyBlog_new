@@ -1,5 +1,4 @@
 from django.contrib import messages, auth
-from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import Http404
@@ -12,6 +11,7 @@ from .utils import (
     years,
     months,
     days,
+    get_read_time
 )
 
 
@@ -76,7 +76,8 @@ def post_detail(request, post_slug):
         if not request.user.is_staff and not request.user.is_superuser:
             raise Http404
     context = {
-        'post': instance
+        'post': instance,
+        'read_time': get_read_time(instance.content)
     }
     return render(request, 'post_detail.html', context)
 
@@ -131,6 +132,6 @@ def post_update(request, post_slug):
 def post_delete(request, post_slug):
     instance = get_object_or_404(Post, slug=post_slug)
     if not request.user == instance.author and not request.user.is_superuser:
-        raise PermissionDenied
+        raise Http404
     instance.delete()
     return redirect('posts:post_list')

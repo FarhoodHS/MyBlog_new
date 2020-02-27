@@ -27,7 +27,14 @@ All posts
         {% endif %}
     </ol>
 </nav>
+{% if messages %}
+{% for message in messages %}
+{% if not 'Username' in message.message and not 'login' in message.message %}
 {% include "parts/alerts.html" %}
+{% endif %}
+{% endfor %}
+{% endif %}
+
 <div class="row justify-content-center mt-3">
     <div class="col align-self-center">
         {% for post in posts %}
@@ -38,7 +45,7 @@ All posts
                     <img src="{{ post.image.url }}" class="card-img">
                 </div>
                 {% endif %}
-                <div class="col-md-8">
+                <div {% if post.image %} class="col-md-8" {% else %} class="col-md-12" {% endif %}>
                     <div class="card-body">
                         <h5 class="card-title">{{ post.title }} {% if post.is_updated %}
                             <span class="badge badge-pill badge-success">Updated</span>{% endif %}
@@ -53,7 +60,10 @@ All posts
                         </footer>
                         <br>
                         <p class="card-text">{{ post.content|truncatewords:21 }}</p>
-                        <a href="{% url 'posts:post_detail' post.slug %}" class="btn btn-primary">view</a>
+                        <div style="text-align: end;">
+                            <a href="{% url 'posts:post_detail' post.slug %}"
+                                class="btn btn-primary text-right">view</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -110,3 +120,7 @@ All posts
     </nav>
 </footer>
 {% endblock content %}
+
+{% block right_sidebar %}
+{% include "parts/side_dashboard.html" %}
+{% endblock right_sidebar %}

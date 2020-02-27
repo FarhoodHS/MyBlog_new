@@ -15,14 +15,16 @@
     <div class="container-fluid">
         <div class="row mt-3">
             <div class="col-3">
+                {% block left_sidebar %}
+                {% endblock left_sidebar %}
             </div>
-
             <div class="col">
                 {% block content %}
                 {% endblock content %}
             </div>
             <div class="col-3">
-                {% include "parts/side_dashboard.html" %}
+                {% block right_sidebar %}
+                {% endblock right_sidebar %}
             </div>
         </div>
     </div>
