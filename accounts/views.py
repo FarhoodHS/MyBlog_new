@@ -68,3 +68,30 @@ def logout(request):
         #     'username': request.user.username,
         #     'profile_pic': request.user.profile_pic,
         # })
+
+
+def login(request):
+    if request.method == 'POST':
+        id = request.POST['id']
+        password = request.POST['password']
+        if '@' in id:
+            credential = 'Email'
+            try:
+                user = Profile.objects.get(email=id)
+                id = user.username
+                user = auth.authenticate(username=id, password=password)
+            except Profile.DoesNotExist:
+                messages.error(
+                    request, f'{credential} or Password is incorrect :(')
+                return render(request, 'login_form.html')
+        else:
+            credential = 'Username'
+            user = auth.authenticate(username=id, password=password)
+        if user is not None:
+            auth.login(request, user)
+            messages.success(request, 'You are now logged in :)')
+            return redirect('posts:post_list')
+        else:
+            messages.error(
+                request, f'{credential} or Password is incorrect :(')
+    return render(request, 'login_form.html')

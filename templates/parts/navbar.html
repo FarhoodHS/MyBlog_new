@@ -19,6 +19,29 @@
             <li {% if 'projects' in request.path %} class="nav-item active" {% else %} class="nav-item" {% endif %}>
                 <a class="nav-link" href="{% url 'projects' %}">Projects</a>
             </li>
+            <li class="nav-item dropdown ml-3">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    Accounts
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% if user.is_authenticated %}
+                    <a class="dropdown-item" href="{% url 'accounts:dashboard' %}">My Dashboard</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="javascript:{document.getElementById('logout').submit()}"
+                        onclick="">Logout</a>
+                    <form id="logout" method="POST" action="{% url 'accounts:logout' %}">
+                        {% csrf_token %}
+                        <input type="hidden">
+                    </form>
+                    {% else %}
+                    <a class="dropdown-item" href="{% url 'accounts:login' %}">Login</a>
+                    <a class="dropdown-item" href="{% url 'accounts:signup' %}">Signup</a>
+                    {% endif %}
+                    <!-- <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Something else here</a> -->
+                </div>
+            </li>
         </ul>
         {% if 'posts' in request.path %}
         <form action="{% url 'posts:post_list' %}" method="GET" class="form-inline my-2 my-lg-0">{% csrf_token %}

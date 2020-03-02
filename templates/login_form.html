@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block extracss %}
+<style>
+    .center {
+        padding: 150px 0;
+    }
+</style>
+{% endblock extracss %}
+{% block title %}
+Log In
+{% endblock title %}
+
+{% block content %}
+<div class="center">
+    <div class="col col-6 mx-auto">
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h3 class="text-center">Log In</h3><br>
+            {% include "parts/alerts.html" %}
+            <div class="form-row">
+                <div class="form-group col">
+                    <label>Email or Username</label>
+                    <input type="text" name="id" class="form-control" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col">
+                    <label>Password</label>
+                    <input type="password" name="password" class="form-control" required>
+                </div>
+            </div>
+            <br>
+            <button class="btn btn-primary btn-block" type="submit">Log me in!</button>
+        </form><br>
+        <a href="{% url 'accounts:signup' %}">I need an account</a>
+    </div>
+</div>
+{% endblock content %}
