@@ -1,1 +1,23 @@
-پیدا نشد!
+{% extends "base.html" %}
+
+{% block extracss %}
+<style>
+    .center {
+        padding: 150px 0;
+    }
+</style>
+{% endblock extracss %}
+
+{% block content %}
+<div class="center">
+    <h1 class="text-center">
+        OOOPS!
+    </h1>
+    <br>
+    <div class="row align-items-center">
+        <div class="col text-center">
+            Couldn't find what you're looking for :(
+        </div>
+    </div>
+</div>
+{% endblock content %}
