@@ -1,8 +1,32 @@
 {% extends "base.html" %}
 
+<<<<<<< HEAD
 {% block content %}
 
 404
 couldn't find anything matching your request
 
 {% endblock content %}
+=======
+{% block extracss %}
+<style>
+    .center {
+        padding: 150px 0;
+    }
+</style>
+{% endblock extracss %}
+
+{% block content %}
+<div class="center">
+    <h1 class="text-center">
+        OOOPS!
+    </h1>
+    <br>
+    <div class="row align-items-center">
+        <div class="col text-center">
+            Couldn't find what you're looking for :(
+        </div>
+    </div>
+</div>
+{% endblock content %}
+>>>>>>> c0cfec8e6907199244d03c7dbfdb501a4ca8e18a
